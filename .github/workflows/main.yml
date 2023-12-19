@@ -1,0 +1,49 @@
+name: Deploy to Private Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check formatting
+        run: npm run lint:prettier
+
+      - name: Check linting
+        run: npm run lint:js
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+  # deploy:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Deploy via SSH
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.SERVER_HOST }}
+  #         username: ${{ secrets.SERVER_USERNAME }}
+  #         key: ${{ secrets.SSH_PRIVATE_KEY }}
+  #         script: |
+  #           cd /path/to/deployment
+  #           git pull origin main
+  #           npm install
+  #           npm run build
+  #           # Add any additional deployment commands here
