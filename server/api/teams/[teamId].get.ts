@@ -2,6 +2,7 @@ import { scrapeTeamsGames } from "~/server/scraper";
 
 export default defineEventHandler((event) => {
   const teamIdParam = getRouterParam(event, "teamId");
+  // eslint-disable-next-line no-console
   console.log(`fetching team data for ${teamIdParam}`);
 
   if (teamIdParam === undefined) {

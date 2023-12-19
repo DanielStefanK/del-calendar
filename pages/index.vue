@@ -15,12 +15,12 @@ const selectedTeamsId = ref<number | undefined>();
         v-if="teams"
         v-model="selectedTeamsId"
         :items="teams"
-        itemTitle="name"
-        itemValue="id"
+        item-title="name"
+        item-value="id"
       ></v-select>
     </v-card-title>
     <v-card-text>
-      <games-list :teamId="selectedTeamsId" />
+      <games-list :team-id="selectedTeamsId" />
     </v-card-text>
   </v-card>
 </template>
