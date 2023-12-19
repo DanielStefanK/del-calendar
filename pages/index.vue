@@ -1,6 +1,21 @@
 <script setup lang="ts">
 const { data: teams, error, pending } = await useFetch("/api/teams");
-const selectedTeamsId = ref<number | undefined>();
+const selectedTeamsId = ref<
+  | {
+      id: number;
+      name: string;
+    }
+  | undefined
+>();
+
+const teamId = computed({
+  get: () => selectedTeamsId.value?.id,
+  set: (value) => {
+    selectedTeamsId.value = teams.value?.find((team) => team.id === value);
+  },
+});
+
+useQueryFilter("teamId", teamId);
 </script>
 
 <template>
@@ -15,12 +30,16 @@ const selectedTeamsId = ref<number | undefined>();
         v-if="teams"
         v-model="selectedTeamsId"
         :items="teams"
+        return-object
         item-title="name"
         item-value="id"
       ></v-select>
     </v-card-title>
     <v-card-text>
-      <games-list :team-id="selectedTeamsId" />
+      <games-list
+        :team-id="selectedTeamsId?.id"
+        :team-name="selectedTeamsId?.name"
+      />
     </v-card-text>
   </v-card>
 </template>
