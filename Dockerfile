@@ -20,4 +20,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Start the Nuxt app
-CMD ["npm", "start"]
+CMD ["node", "/app/.output/server/index.mjs"]
