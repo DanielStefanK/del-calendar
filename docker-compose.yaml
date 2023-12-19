@@ -1,0 +1,33 @@
+version: '3'
+services:
+  del-kalendar:
+    build: .
+    restart: always
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.del-kalendar-backend-rt.entrypoints=http"
+      - "traefik.http.routers.del-kalendar-backend-rt.rule=Host(`del-kalendar.daniel-stefan.dev`)"
+      - "traefik.http.middlewares.del-kalendar-backend-rt-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.del-kalendar-backend-rt.middlewares=del-kalendar-backend-rt-https-redirect"
+      - "traefik.http.routers.del-kalendar-backend-rt-secure.entrypoints=https"
+      - "traefik.http.routers.del-kalendar-backend-rt-secure.rule=Host(`del-kalendar.daniel-stefan.dev`)"
+      - "traefik.http.routers.del-kalendar-backend-rt-secure.tls=true"
+      - "traefik.http.routers.del-kalendar-backend-rt-secure.tls.certresolver=http"
+      - "traefik.http.routers.del-kalendar-backend-rt-secure.service=del-kalendar-backend-rt"
+      - "traefik.http.services.del-kalendar-backend-rt.loadbalancer.server.port=3000"
+      - "traefik.docker.network=web"
+      - "traefik.http.middlewares.myCors.headers.accesscontrolallowmethods=GET,OPTIONS,PUT"
+      - "traefik.http.middlewares.myCors.headers.accesscontrolalloworigin=*"
+      - "traefik.http.middlewares.myCors.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.myCors.headers.addvaryheader=true"
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+
+
+networks:
+  web:
+    external: true
